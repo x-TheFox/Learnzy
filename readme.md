@@ -11,7 +11,7 @@ Learnzy is a full-stack web application that adapts learning content and assessm
 - 🧠 **AI-Powered Adaptive Quizzes** — Difficulty adjusts dynamically based on performance
 - 📖 **Dyslexia-Friendly Reading** — Customizable fonts, color overlays, and text simplification via AI
 - 🔊 **Text-to-Speech** — Browser-native read-aloud support for all reading content
-- ✨ **AI Text Simplification** — OpenAI-powered simplification of complex text
+- ✨ **AI Text Simplification** — Groq-powered simplification of complex text
 - 💡 **Quiz Hints** — AI-generated hints that guide without giving away answers
 - 🎯 **ADHD-Aware UX** — Minimal distractions, focus timers, clear progress indicators
 - 📊 **Progress Tracking** — Detailed analytics on quizzes, streaks, and reading sessions
@@ -26,7 +26,7 @@ Learnzy is a full-stack web application that adapts learning content and assessm
 | Backend | Node.js, Express.js |
 | Database | MongoDB + Mongoose |
 | Authentication | Firebase Auth |
-| AI | OpenAI GPT-3.5 |
+| AI | Groq (Llama 3.3 70B) |
 | Deployment | Vercel (frontend), Render (backend) |
 
 ## Project Structure
@@ -66,7 +66,33 @@ Learnzy/
 - Node.js 18+
 - MongoDB (local or Atlas)
 - Firebase project
-- OpenAI API key
+- Groq API key (free tier available at [console.groq.com](https://console.groq.com))
+
+### Groq API Key Setup
+
+Learnzy uses [Groq](https://groq.com) as its AI provider for fast, low-latency inference. Groq runs open-source large language models (LLMs) on custom LPU™ hardware, offering a generous free tier with no credit card required.
+
+**Steps to get your Groq API key:**
+
+1. Visit [console.groq.com](https://console.groq.com) and sign up for a free account.
+2. Once logged in, navigate to **API Keys** in the left sidebar.
+3. Click **Create API Key**, give it a name (e.g., `learnzy-dev`), and click **Submit**.
+4. Copy the generated key — it starts with `gsk_...`. **Store it securely; you won't be able to view it again.**
+5. Paste the key as the value of `GROQ_API_KEY` in your `backend/.env` file.
+
+**Model used:** `llama-3.3-70b-versatile`
+
+This is Meta's Llama 3.3 70B model hosted on Groq's infrastructure. It is fast, instruction-tuned, and well-suited for educational tasks such as text simplification, hint generation, and focus analysis. The free tier allows up to **14,400 requests per day** and **6,000 tokens per minute** (as of the current Groq limits — check the [Groq rate limits page](https://console.groq.com/docs/rate-limits) for the latest).
+
+**Why Groq?**
+
+| Feature | Groq |
+|---------|------|
+| Speed | Extremely fast inference (often <1s for short prompts) |
+| Cost | Generous free tier, no credit card required to start |
+| Models | Llama 3.3, Mixtral, Gemma, and more |
+| Compatibility | OpenAI-compatible SDK interface |
+| Privacy | Data not used for training by default |
 
 ### Backend Setup
 
@@ -102,8 +128,10 @@ CLIENT_URL=http://localhost:3000
 FIREBASE_PROJECT_ID=your-firebase-project-id
 FIREBASE_CLIENT_EMAIL=your-firebase-client-email
 FIREBASE_PRIVATE_KEY="your-firebase-private-key"
-OPENAI_API_KEY=your-openai-api-key
+GROQ_API_KEY=your-groq-api-key
 ```
+
+> **Tip:** Get your `GROQ_API_KEY` from [console.groq.com/keys](https://console.groq.com/keys). The key starts with `gsk_`.
 
 **Frontend** (`frontend/.env.local`):
 ```
@@ -145,9 +173,11 @@ The platform uses a Service-Oriented Architecture (SOA):
 - **Frontend** communicates with the backend REST API using Axios with Firebase JWT tokens
 - **Backend** verifies tokens using Firebase Admin SDK before processing requests
 - **MongoDB** stores user profiles, quizzes, content, and progress data
-- **OpenAI** powers text simplification, hints, and focus analysis features
+- **Groq** powers text simplification, hints, and focus analysis features using the `llama-3.3-70b-versatile` model via the official `groq-sdk` Node.js package
 
 ## Deployment
 
 - **Frontend**: Deploy to [Vercel](https://vercel.com) — connect the `frontend/` directory
 - **Backend**: Deploy to [Render](https://render.com) — point to `backend/` directory with `npm start`
+
+> **Important:** When deploying the backend, add `GROQ_API_KEY` as an environment variable in your hosting provider's dashboard (e.g., Render → Environment → Add Environment Variable).
