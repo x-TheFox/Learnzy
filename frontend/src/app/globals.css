@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* Accessibility: Dyslexia-friendly font option */
+body.font-opendyslexic {
+  font-family: 'OpenDyslexic', Arial, sans-serif;
+}
+
+/* High contrast mode */
+body.high-contrast {
+  --background: #000000;
+  --foreground: #ffffff;
+  background: #000;
+  color: #fff;
+}
+
+/* Cream background theme (easier on eyes) */
+body.theme-cream {
+  --background: #fefae0;
+  --foreground: #333333;
+  background: #fefae0;
+  color: #333;
+}
+
+/* Blue overlay theme */
+body.theme-blue {
+  --background: #dbeafe;
+  --foreground: #1e3a5f;
+  background: #dbeafe;
+  color: #1e3a5f;
+}
+
+/* Font size overrides */
+body.font-small { font-size: 14px; }
+body.font-medium { font-size: 16px; }
+body.font-large { font-size: 18px; }
+body.font-x-large { font-size: 22px; }
+
+/* Focus ring improvements for ADHD users */
+*:focus-visible {
+  outline: 3px solid #4f46e5;
+  outline-offset: 2px;
+}
+
